@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  # Portainer
+  #----------
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:linux-arm
+    restart: unless-stopped
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - '$HOME/networks/docker/portainer/data/:/data'
