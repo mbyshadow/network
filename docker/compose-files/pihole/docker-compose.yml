@@ -29,8 +29,8 @@ services:
       DNS1: '10.0.0.2#5054'
       DNS2: ''
       TZ: '${TIMEZONE}'
+      WEBPASSWORD: '${WEBPASSWORD}'
       DNSMASQ_LISTENING: all
-      WEBPASSWORD: admin
     volumes:
       - '$HOME/networks/docker/pihole/etc-pihole/:/etc/pihole/'
       - '$HOME/networks/docker/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
