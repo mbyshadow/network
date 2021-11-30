@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+  # Cloudflared
+  #------------------------------------
+  cloudflared:
+    image: visibilityspots/cloudflared:latest
+    container_name: cloudflared
+    environment:
+      TZ: '${TIMEZONE}'
+    restart: unless-stopped
+    networks:
+      pihole_net:
+        ipv4_address: 10.0.0.2
+        
+  # pihole
+  # -----------------------------------
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+#   For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+    environment:
+      ServerIP: 10.0.0.3
+      DNS1: '10.0.0.2#5054'
+      DNS2: ''
+      TZ: '${TIMEZONE}'
+      DNSMASQ_LISTENING: all
+      WEBPASSWORD: admin
+    volumes:
+      - '$HOME/networks/docker/pihole/etc-pihole/:/etc/pihole/'
+      - '$HOME/networks/docker/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+
+#run `touch $HOME/var-log/pihole.log` first unless you like errors
+#     - '$HOME/var-log/pihole.log:/var/log/pihole.log'
+
+    networks:
+      pihole_net:
+        ipv4_address: 10.0.0.3
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    cap_add:
+      - NET_ADMIN
+      
+networks:
+  pihole_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/29
