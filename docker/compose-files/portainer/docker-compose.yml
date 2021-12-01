@@ -10,7 +10,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+      - '$HOME/networks/docker/portainer/var/run/docker.sock:/var/run/docker.sock:ro'
+      - '$HOME/networks/docker/portainer/etc/localtime:/etc/localtime:ro'
+      - '$HOME/networks/docker/portainer/etc/timezone:/etc/timezone:ro'
       - '$HOME/networks/docker/portainer/data/:/data'
