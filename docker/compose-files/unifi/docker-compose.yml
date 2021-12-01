@@ -2,23 +2,23 @@ version: '2.3'
 services:
   # Mongodb
   #-----------------
-  mongo:
-    image: mongo:3.6
-    container_name:  ${COMPOSE_PROJECT_NAME}_mongo
-    networks:
-      - unifi
-    restart: always
-    volumes:
-      - '$HOME/networks/docker/mongodb/db:/data/db'
-      - '$HOME/networks/docker/mongodb/dbcfg:/data/configdb'
+#  mongo:
+#    image: mongo:3.6
+#    container_name:  ${COMPOSE_PROJECT_NAME}_mongo
+#    networks:
+#      - unifi
+#    restart: always
+#    volumes:
+#      - '$HOME/networks/docker/mongodb/db:/data/db'
+#      - '$HOME/networks/docker/mongodb/dbcfg:/data/configdb'
 
   # UniFi Controller
   #-----------------
   controller:
     image: "jacobalberty/unifi:${TAG:-latest}"
     container_name: ${COMPOSE_PROJECT_NAME}_controller
-    depends_on:
-      - mongo
+#    depends_on:
+#     - mongo
     init: true
     networks:
       - unifi
@@ -32,13 +32,14 @@ services:
       - '$HOME/networks/docker/unifi/run:/var/run/unifi'
      # Mount local folder for backups and autobackups
      #- '$HOME/networks/docker/pihole/unifi/backup:/unifi/data/backup'
-    user: unifi
-    sysctls:
-      net.ipv4.ip_unprivileged_port_start: 0
+#    user: unifi
+#    sysctls:
+#      net.ipv4.ip_unprivileged_port_start: 0
     environment:
-      DB_URI: '$HOME/networks/docker/mongodb://mongo/unifi'
-      STATDB_URI: '$HOME/networks/docker/mongodb://mongo/unifi_stat'
-      DB_NAME: unifi
+       RUNAS_UID0: 'false'
+ #     DB_URI: '$HOME/networks/docker/mongodb://mongo/unifi'
+ #     STATDB_URI: '$HOME/networks/docker/mongodb://mongo/unifi_stat'
+ #     DB_NAME: unifi
     ports:
       - "3478:3478/udp" # STUN
       - "6789:6789/tcp" # Speed test
@@ -60,15 +61,15 @@ services:
     volumes:
       - '$HOME/networks/docker/unifi/log:/unifi/log'
 
-volumes:
-  db:
-  dbcfg:
-  data:
-  log:
-  cert:
-  init:
-  dir:
-  run:
+#volumes:
+#  db:
+#  dbcfg:
+#  data:
+#  log:
+#  cert:
+#  init:
+#  dir:
+#  run:
 
 networks:
   unifi:
