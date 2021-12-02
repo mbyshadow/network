@@ -1,0 +1,19 @@
+sudo ip link set eth0 promisc on
+sudo ip link add macvlan-shim link eth0 type macvlan mode bridge
+sudo ip addr add 172.19.32.60/28 dev macvlan-shim
+
+
+
+
+
+
+docker network create -d macvlan \
+    --subnet=172.19.32.1/24 --gateway=172.19.32.1 \
+    --ip-range 172.19.32.59/28 \
+    -o parent=eth0 \
+    --aux-address="myserver=172.19.32.60" \
+    macvlan0
+
+
+sudo chmod +x  /usr/local/bin/pi-vlan.sh
+sudo systemctl enable pi-vlan
