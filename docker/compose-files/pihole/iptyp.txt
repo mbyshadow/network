@@ -17,3 +17,6 @@ docker network create -d macvlan \
 
 sudo chmod +x  /usr/local/bin/pi-vlan.sh
 sudo systemctl enable pi-vlan
+
+
+ sysctl net.ipv4.conf.all.forwarding=1

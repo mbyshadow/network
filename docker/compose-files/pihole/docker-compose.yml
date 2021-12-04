@@ -4,12 +4,15 @@ services:
   #------------------------------------
   cloudflared:
     image: visibilityspots/cloudflared:latest
-    container_name: cloudflared
+    container_name: cloudflared-vlan
+    hostname: cloudflared
+    domainname: fame.local 
     environment:
+      ServerIP: 172.19.32.58
       TZ: '${TIMEZONE}'
     restart: unless-stopped
     networks:
-      macvlan0: # same as network specified below
+      macvlan0:
         ipv4_address: 172.19.32.58 # the IP of the pihole container
         
   # pihole
@@ -20,32 +23,31 @@ services:
     hostname: pihole # set an easy hostname to remember
     domainname: fame.local # your local domain name
     restart: unless-stopped
-#   For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    environment:
+      ServerIP: 172.19.32.59
+      DNS1: '172.19.32.58#5054'
+      DNS2: ''
+      VIRTUAL_HOST: pihole.fame.local
+      TZ: '${TIMEZONE}'
+      WEBPASSWORD: '${WEBPASSWORD}'
     cap_add:
       - NET_ADMIN 
     networks:
-      macvlan0: # same as network specified below
+      macvlan0: 
         ipv4_address: 172.19.32.59 # the IP of the pihole container 
     dns:
       - 127.0.0.1
       - 1.1.1.1
     ports:
+#   For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
       - "80:80/tcp"
-    environment:
-      ServerIP: 172.19.32.59
-      DNS1: '172.19.32.58#5054'
-      DNS2: ''
-      VIRTUAL_HOST: pihole.fane.local
-      TZ: '${TIMEZONE}'
-      WEBPASSWORD: '${WEBPASSWORD}'
     volumes:
       - '$HOME/networks/docker/pihole/etc-pihole/:/etc/pihole/'
       - '$HOME/networks/docker/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
       - '$HOME/networks/docker/pihole/backups/:/backups/'
-
 #touch ..-log/pihole.log` first unless you like errors
 #     - '$HOME/var-log/pihole.log:/var/log/pihole.log'
 
