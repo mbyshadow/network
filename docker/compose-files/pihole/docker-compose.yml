@@ -5,16 +5,14 @@ services:
   cloudflared:
     image: visibilityspots/cloudflared:latest
     container_name: cloudflared-vlan
-    hostname: cloudflared
-    domainname: fame.local 
+    hostname: cloudflared 
     environment:
-      ServerIP: 172.19.32.58
       TZ: '${TIMEZONE}'
     restart: unless-stopped
     networks:
       macvlan0:
         ipv4_address: 172.19.32.58 # the IP of the pihole container
-        
+         
   # pihole
   # -----------------------------------
   pihole:
