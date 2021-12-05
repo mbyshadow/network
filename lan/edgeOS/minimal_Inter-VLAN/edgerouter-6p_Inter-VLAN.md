@@ -9,8 +9,8 @@
 eth0: WAN         - DHCP
 eth1: Management 
 eth2: Edgeswitch  - 172.19.2.2/30
-eth2.2: vlan_2    - 172.19.20.xxx
-eth2.3: vlan_3    - 172.19.30.xxx
+eth2.2: vlan_20   - 172.19.20.xxx
+eth2.3: vlan_30    - 172.19.30.xxx
 eth3: LAN         - 172.19.3.xxx
 eth4:
 eth5:
@@ -98,11 +98,11 @@ commit; save; exit
 configure
 delete interfaces ethernet eth2.20
 
-set interfaces ethernet eth2 vif 20 description "vlan_2"
+set interfaces ethernet eth2 vif 20 description "vlan_20"
 set interfaces ethernet eth2 vif 20 address 172.19.20.1/24
 set interfaces ethernet eth2 vif 20 firewall local name DHCP_DNS_MDNS_LOCAL
 
-edit service dhcp-server shared-network-name dhcp_vlan_2
+edit service dhcp-server shared-network-name dhcp_vlan_20
 set authoritative disable
 set subnet 172.19.20.0/24 start 172.19.20.10 stop 172.19.20.100
 set subnet 172.19.20.0/24 default-router 172.19.20.1
@@ -119,11 +119,11 @@ commit; save; exit
 configure
 delete interfaces ethernet eth2.30
 
-set interfaces ethernet eth2 vif 30 description "vlan_3"
+set interfaces ethernet eth2 vif 30 description "vlan_30"
 set interfaces ethernet eth2 vif 30 address 172.19.30.1/24
 
 #this one outside adwall
-edit service dhcp-server shared-network-name dhcp_vlan_3
+edit service dhcp-server shared-network-name dhcp_vlan_30
 set authoritative disable
 set subnet 172.19.30.0/24 start 172.19.30.10 stop 172.19.30.100
 set subnet 172.19.30.0/24 default-router 172.19.30.1
