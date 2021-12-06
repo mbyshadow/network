@@ -3,3 +3,5 @@ docker/pihole/etc-dnsmasq.d/*
 docker/pihole/backup/*
 
 docker/unifi*
+
+*.code-workspace
